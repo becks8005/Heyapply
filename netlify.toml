@@ -1,19 +1,13 @@
 # Netlify Configuration für Heyapply
-# Falls du Netlify statt Vercel verwendest
+# Next.js App Router mit @netlify/plugin-nextjs
 
 [build]
   command = "npx prisma generate && npm run build"
-  publish = ".next"
+  # publish wird automatisch vom Next.js Plugin verwaltet
 
-# Next.js benötigt diese Einstellungen
+# Next.js Plugin - verwaltet automatisch Routing, Functions, etc.
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-# Redirects für Next.js App Router
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/next"
-  status = 200
 
 # Functions Konfiguration
 [functions]
