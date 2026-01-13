@@ -14,6 +14,12 @@ export const prisma =
     log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
   })
 
+// Log Prisma initialization
+if (process.env.NODE_ENV === "production") {
+  console.log("[PRISMA] Prisma Client initialized in production")
+  console.log("[PRISMA] DATABASE_URL exists:", !!process.env.DATABASE_URL)
+}
+
 // #region agent log: prisma-init-created
 fetch('http://127.0.0.1:7242/ingest/76ffc9c7-059e-4b32-88e6-f7831653fbdd',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'build-prisma',hypothesisId:'A',location:'lib/prisma.ts:12',message:'Prisma client created',data:{cached:!!globalForPrisma.prisma},timestamp:Date.now()})}).catch(()=>{})
 // #endregion

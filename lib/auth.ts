@@ -28,15 +28,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
+        console.log("[AUTH] authorize() called")
         try {
+          console.log("[AUTH] Checking credentials...")
           if (!credentials?.email || !credentials?.password) {
             console.error("[AUTH] Missing credentials")
             throw new Error("Email und Passwort erforderlich")
           }
           
+          console.log("[AUTH] Looking up user:", credentials.email)
+          console.log("[AUTH] Prisma client available:", !!prisma)
+          
           const user = await prisma.user.findUnique({
             where: { email: credentials.email as string }
           })
+          
+          console.log("[AUTH] User lookup result:", user ? "found" : "not found")
           
           if (!user) {
             console.error("[AUTH] User not found:", credentials.email)
