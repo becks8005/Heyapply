@@ -1,0 +1,24 @@
+# Netlify Configuration für Heyapply
+# Falls du Netlify statt Vercel verwendest
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# Next.js benötigt diese Einstellungen
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Redirects für Next.js App Router
+[[redirects]]
+  from = "/*"
+  to = "/.netlify/functions/next"
+  status = 200
+
+# Functions Konfiguration
+[functions]
+  node_bundler = "esbuild"
+  
+# Hinweis: Cron Jobs müssen über Netlify Scheduled Functions konfiguriert werden
+# Siehe: https://docs.netlify.com/functions/trigger-on-events/scheduled-functions/
+# Oder verwende einen externen Service wie cron-job.org

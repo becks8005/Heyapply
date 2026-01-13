@@ -97,14 +97,25 @@ Dann ist die URL immer: `https://heyapply-test.loca.lt`
 
 Für die Production-Umgebung mit der Domain `app.heyapply.ch`:
 
-### 🚀 Start hier!
+### 🚀 Deployment-Optionen
 
-**📖 [VERCEL-START-HIER.md](./VERCEL-START-HIER.md)** - Übersicht und Einstiegspunkt
+**📊 [DEPLOYMENT-ALTERNATIVES.md](./DEPLOYMENT-ALTERNATIVES.md)** - Vergleich aller Hosting-Optionen
 
-### 📚 Dokumentation
+### 🟢 Netlify (Kostenlos, empfohlen für Start)
+
+**Für Anfänger (noch nie Netlify verwendet):**
+📖 **[NETLIFY-COMPLETE-SETUP.md](./NETLIFY-COMPLETE-SETUP.md)** ⭐ **STARTE HIER!** - Detaillierte Anleitung von Anfang bis Ende
+
+**Checkliste verwenden:**
+✅ **[NETLIFY-CHECKLIST.md](./NETLIFY-CHECKLIST.md)** - Schritt-für-Schritt Checkliste
+
+**Schnelle Referenz:**
+⚡ **[NETLIFY-QUICK-REFERENCE.md](./NETLIFY-QUICK-REFERENCE.md)** - Häufige Befehle und Links
+
+### 🔵 Vercel (Pro Plan $20/mo, beste Performance)
 
 **Für Anfänger (noch nie Vercel verwendet):**
-📖 **[VERCEL-COMPLETE-SETUP.md](./VERCEL-COMPLETE-SETUP.md)** ⭐ **STARTE HIER!** - Detaillierte Anleitung von Anfang bis Ende
+📖 **[VERCEL-COMPLETE-SETUP.md](./VERCEL-COMPLETE-SETUP.md)** - Detaillierte Anleitung von Anfang bis Ende
 
 **Checkliste verwenden:**
 ✅ **[VERCEL-CHECKLIST.md](./VERCEL-CHECKLIST.md)** - Schritt-für-Schritt Checkliste
@@ -115,17 +126,23 @@ Für die Production-Umgebung mit der Domain `app.heyapply.ch`:
 **Für Fortgeschrittene (nur Domain-Konfiguration):**
 📖 **[VERCEL-DOMAIN-SETUP.md](./VERCEL-DOMAIN-SETUP.md)** - Schnelle Anleitung für Domain-Setup
 
-### Kurze Zusammenfassung
+### Empfehlung
 
-1. Vercel Account erstellen und Projekt verbinden
-2. Umgebungsvariablen in Vercel konfigurieren
+- **Kostenlos starten:** Nutze **Netlify** → [NETLIFY-COMPLETE-SETUP.md](./NETLIFY-COMPLETE-SETUP.md)
+- **Beste Performance:** Nutze **Vercel Pro** → [VERCEL-COMPLETE-SETUP.md](./VERCEL-COMPLETE-SETUP.md)
+
+### Kurze Zusammenfassung (Netlify)
+
+1. Netlify Account erstellen und Projekt verbinden
+2. Umgebungsvariablen in Netlify konfigurieren
 3. Erstes Deployment durchführen
-4. Domain `app.heyapply.ch` in Vercel hinzufügen
-5. DNS-Record bei GoDaddy konfigurieren (CNAME oder A-Record)
-6. `NEXTAUTH_URL` in Vercel auf `https://app.heyapply.ch` setzen
-7. Neues Deployment starten
+4. Domain `app.heyapply.ch` in Netlify hinzufügen
+5. DNS-Record bei GoDaddy konfigurieren (CNAME)
+6. Cron Jobs über externen Service einrichten (z.B. cron-job.org)
+7. `NEXTAUTH_URL` in Netlify auf `https://app.heyapply.ch` setzen
+8. Neues Deployment starten
 
-**Die vollständige Schritt-für-Schritt-Anleitung:** [VERCEL-COMPLETE-SETUP.md](./VERCEL-COMPLETE-SETUP.md)
+**Die vollständige Schritt-für-Schritt-Anleitung:** [NETLIFY-COMPLETE-SETUP.md](./NETLIFY-COMPLETE-SETUP.md)
 
 ## Projektstruktur
 
