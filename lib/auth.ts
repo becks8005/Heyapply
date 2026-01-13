@@ -9,11 +9,7 @@ const authSecret = process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET
 fetch('http://127.0.0.1:7242/ingest/76ffc9c7-059e-4b32-88e6-f7831653fbdd',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'auth-debug',hypothesisId:'A',location:'lib/auth.ts:9',message:'Auth config start',data:{hasAuthSecret:!!process.env.AUTH_SECRET,hasNextAuthSecret:!!process.env.NEXTAUTH_SECRET,secretLength:authSecret?.length||0,nodeEnv:process.env.NODE_ENV},timestamp:Date.now()})}).catch(()=>{})
 // #endregion
 
-// Wrap auth function to catch errors
-let authFunction: typeof auth
-let originalAuth: typeof auth
-
-export const { handlers, auth: originalAuthFn, signIn, signOut } = NextAuth({
+export const { handlers, auth, signIn, signOut } = NextAuth({
   // Note: PrismaAdapter removed - not needed with JWT strategy and can cause issues
   // adapter: PrismaAdapter(prisma), // REMOVED - causes issues with JWT strategy
   session: { strategy: "jwt" },
@@ -112,21 +108,3 @@ export const { handlers, auth: originalAuthFn, signIn, signOut } = NextAuth({
   }
 })
 
-// Wrap auth() to add error logging
-export const auth = async (...args: Parameters<typeof originalAuthFn>) => {
-  // #region agent log: auth-function-call
-  fetch('http://127.0.0.1:7242/ingest/76ffc9c7-059e-4b32-88e6-f7831653fbdd',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'auth-debug',hypothesisId:'E',location:'lib/auth.ts:95',message:'Auth function called',data:{argsCount:args.length},timestamp:Date.now()})}).catch(()=>{})
-  // #endregion
-  try {
-    const result = await originalAuthFn(...args)
-    // #region agent log: auth-function-success
-    fetch('http://127.0.0.1:7242/ingest/76ffc9c7-059e-4b32-88e6-f7831653fbdd',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'auth-debug',hypothesisId:'E',location:'lib/auth.ts:100',message:'Auth function success',data:{hasSession:!!result,hasUser:!!result?.user,userId:result?.user?.id||'none'},timestamp:Date.now()})}).catch(()=>{})
-    // #endregion
-    return result
-  } catch (error) {
-    // #region agent log: auth-function-error
-    fetch('http://127.0.0.1:7242/ingest/76ffc9c7-059e-4b32-88e6-f7831653fbdd',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'auth-debug',hypothesisId:'E',location:'lib/auth.ts:105',message:'Auth function error',data:{error:error instanceof Error?error.message:String(error),stack:error instanceof Error?error.stack?.substring(0,500):undefined},timestamp:Date.now()})}).catch(()=>{})
-    // #endregion
-    throw error
-  }
-}
