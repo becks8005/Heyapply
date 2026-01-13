@@ -1,0 +1,337 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== AUTH ====================
+
+model User {
+  id                    String    @id @default(cuid())
+  email                 String    @unique
+  emailVerified         DateTime?
+  passwordHash          String?
+  firstName             String?
+  lastName              String?
+  profileImageUrl       String?
+  profileImageCrop      String?   // JSON as string: {x, y, width, height, zoom}
+  
+  // Subscription
+  subscriptionTier      String    @default("FREE")
+  stripeCustomerId      String?   @unique
+  stripeSubscriptionId  String?
+  subscriptionStatus    String    @default("ACTIVE")
+  currentPeriodStart    DateTime?
+  currentPeriodEnd      DateTime?
+  
+  // Usage Tracking (Monthly)
+  monthlyApplicationCount Int     @default(0)
+  usageResetDate        DateTime  @default(now())
+  
+  // LinkedIn
+  linkedInAccessToken   String?
+  linkedInRefreshToken  String?
+  linkedInProfileUrl    String?
+  
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  
+  // Relations
+  profile               Profile?
+  applications          Application[]
+  folders               Folder[]
+  accounts              Account[]
+  sessions              Session[]
+  usageLogs             UsageLog[]
+  jobSearch             JobSearch?
+  discoveredJobs        DiscoveredJob[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expires   DateTime
+  createdAt DateTime @default(now())
+}
+
+// ==================== PROFILE ====================
+
+model Profile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Original CV
+  originalCvUrl     String?
+  originalCvType    String?  // pdf, docx, pptx
+  
+  // Personal Info
+  phone             String?
+  email             String?
+  address           String?
+  city              String?
+  country           String?
+  linkedInUrl       String?
+  
+  // Tagline (unter dem Namen)
+  tagline           String?  // z.B. "Strategie- und Transformationsberater"
+  
+  // Summary
+  summary           String?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relations
+  experiences       Experience[]
+  education         Education[]
+  skills            Skill[]
+  languages         Language[]
+  certifications    Certification[]
+}
+
+model Experience {
+  id              String    @id @default(cuid())
+  profileId       String
+  profile         Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  
+  jobTitle        String
+  company         String
+  location        String?
+  startDate       DateTime
+  endDate         DateTime?
+  isCurrent       Boolean   @default(false)
+  bullets         String?   // JSON array as string
+  
+  order           Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Education {
+  id              String    @id @default(cuid())
+  profileId       String
+  profile         Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  
+  degree          String
+  institution     String
+  location        String?
+  startDate       DateTime?
+  endDate         DateTime?
+  grade           String?   // z.B. "magna cum laude"
+  description     String?
+  
+  order           Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Skill {
+  id              String   @id @default(cuid())
+  profileId       String
+  profile         Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  
+  name            String
+  category        String   // z.B. "Strategieentwicklung", "Digitale Transformation"
+  
+  order           Int      @default(0)
+}
+
+model Language {
+  id              String   @id @default(cuid())
+  profileId       String
+  profile         Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  
+  name            String
+  level           String   // z.B. "Muttersprache", "C1", "B1"
+  
+  order           Int      @default(0)
+}
+
+model Certification {
+  id              String    @id @default(cuid())
+  profileId       String
+  profile         Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  
+  name            String
+  issuer          String?
+  year            Int?
+  
+  order           Int       @default(0)
+}
+
+// ==================== APPLICATIONS ====================
+
+model Folder {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  name            String
+  color           String        @default("#6366f1")  // Indigo default
+  icon            String?       // Optional icon name
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  applications    Application[]
+  
+  @@unique([userId, name])
+}
+
+model Application {
+  id                  String    @id @default(cuid())
+  userId              String
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  folderId            String?
+  folder              Folder?   @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  
+  // Job Info
+  jobUrl              String?
+  jobTitle            String
+  company             String
+  jobLocation         String?
+  jobDescription      String?
+  jobRequirements     String?   // JSON array as string
+  jobNiceToHave       String?   // JSON array as string
+  contactPerson       String?   // Name der Kontaktperson für Anschreiben
+  contactGender       String?   // "male", "female", "unknown" für Anrede
+  
+  // Generated CV
+  generatedCv         String?   // JSON as string
+  generatedCvHtml     String?
+  cvPdfUrl            String?
+  cvInsights          String?   // JSON as string: structured insights/explanation
+  
+  // Generated Cover Letter
+  coverLetter         String?
+  coverLetterHtml     String?
+  coverLetterPdfUrl   String?
+  coverLetterInsights String?   // JSON as string: structured insights/explanation
+  
+  // Chat
+  chatMessages        String?   // JSON array as string
+  
+  // Status
+  status              String    @default("DRAFT")
+  
+  // Timestamps
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+}
+
+// ==================== USAGE TRACKING ====================
+
+model UsageLog {
+  id              String      @id @default(cuid())
+  userId          String
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  applicationId   String?
+  action          String
+  metadata        String?     // JSON as string
+  createdAt       DateTime    @default(now())
+}
+
+// ==================== JOB SEARCH ====================
+
+model JobSearch {
+  id              String        @id @default(cuid())
+  userId          String        @unique
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Suchpräferenzen (aus CV abgeleitet)
+  keywords        String?       // JSON array: ["Software Engineer", "React", ...]
+  location        String?
+  minSalary       Int?
+  maxSalary       Int?
+  
+  // Manuelle Suchbegriffe (vom User eingegeben)
+  manualJobTitles String?       // JSON array: ["Software Engineer", "Product Manager"]
+  manualLocation  String?       // "Zürich" oder "Schweiz"
+  
+  // Einstellungen
+  searchJobsCh    Boolean       @default(true)
+  searchLinkedIn  Boolean       @default(true)
+  frequency       String        @default("DAILY") // DAILY, WEEKLY
+  
+  lastSearchAt    DateTime?
+  nextSearchAt    DateTime?
+  isActive        Boolean       @default(true)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model DiscoveredJob {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Job-Daten
+  jobUrl          String
+  jobTitle        String
+  company         String
+  location        String?
+  description     String?
+  requirements    String?       // JSON array as string
+  niceToHave      String?       // JSON array as string
+  
+  // Matching
+  matchScore      Float?        // 0-100, wie gut passt der Job zum CV
+  matchReasons    String?       // JSON array as string: ["Skills passen", "Erfahrung relevant"]
+  
+  // Status
+  status          String        @default("NEW") // NEW, VIEWED, APPLIED, ARCHIVED
+  applicationId   String?       // Link zu Application wenn User sich bewirbt
+  
+  // Quelle
+  source          String        // "jobs.ch" oder "linkedin"
+  discoveredAt    DateTime      @default(now())
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@unique([userId, jobUrl])
+  @@index([userId, status])
+  @@index([userId, matchScore])
+}

@@ -1,0 +1,507 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root,
+  .dark {
+    /* ==========================================
+       DARK THEME DESIGN SYSTEM (DEFAULT)
+       Dark UI with bright yellow-green accents
+       ========================================== */
+
+    /* Backgrounds - Dark Theme */
+    --bg-page: #080808;
+    --bg-sidebar: #1A1A1A;
+    --bg-card: #2A2A2A;
+    --bg-muted: #1F1F1F;
+    --bg-hover: #333333;
+    --bg-active: #2A2A2A;
+
+    /* Text Colors - Light on Dark */
+    --text-primary: #FFFFFF;
+    --text-secondary: #D4D4D4;
+    --text-muted: #9CA3AF;
+    --text-placeholder: #6B7280;
+    --text-disabled: #4E4E4E;
+
+    /* Borders - Dark Theme */
+    --border-default: #333333;
+    --border-subtle: #2A2A2A;
+    --border-strong: #4E4E4E;
+
+    /* Accent (Bright Yellow-Green) - Primary Brand Color */
+    --accent-50: #F0F941;
+    --accent-100: #F0F941;
+    --accent-200: #F0F941;
+    --accent-300: #F0F941;
+    --accent-400: #F0F941;
+    --accent-500: #F0F941;
+    --accent-600: #D4D4D4;
+    --accent-700: #D4D4D4;
+    --accent-800: #D4D4D4;
+    --accent-900: #D4D4D4;
+    --accent-rgb: 240, 249, 65;
+
+    /* Status Colors - Dark Theme */
+    --success-bg: rgba(5, 150, 105, 0.2);
+    --success-text: #10B981;
+    --success-border: rgba(5, 150, 105, 0.3);
+    --warning-bg: rgba(217, 119, 6, 0.2);
+    --warning-text: #F59E0B;
+    --warning-border: rgba(217, 119, 6, 0.3);
+    --error-bg: rgba(220, 38, 38, 0.2);
+    --error-text: #EF4444;
+    --error-border: rgba(220, 38, 38, 0.3);
+    --info-bg: rgba(37, 99, 235, 0.2);
+    --info-text: #3B82F6;
+    --info-border: rgba(37, 99, 235, 0.3);
+
+    /* Shadows (very subtle) */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08), 0 4px 8px rgba(0, 0, 0, 0.04);
+
+    /* Border Radii */
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-pill: 9999px;
+
+    /* Spacing (8px grid) */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-16: 64px;
+
+    /* Component Heights */
+    --height-input: 40px;
+    --height-button: 40px;
+    --height-button-sm: 32px;
+    --height-button-lg: 48px;
+    --height-sidebar-item: 40px;
+    --height-table-row: 56px;
+    --height-tab: 36px;
+
+    /* Sidebar */
+    --sidebar-width: 260px;
+    --sidebar-width-collapsed: 52px;
+
+    /* shadcn/ui compatible variables */
+    --background: 0 0% 100%;
+    --foreground: 220 14% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 14% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 14% 10%;
+    --primary: 171 77% 40%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 9% 97%;
+    --secondary-foreground: 220 14% 10%;
+    --muted: 220 9% 97%;
+    --muted-foreground: 215 14% 46%;
+    --accent: 171 77% 40%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 9% 90%;
+    --input: 220 9% 90%;
+    --ring: 171 77% 40%;
+    --radius: 0.5rem;
+  }
+
+  .light {
+    /* ==========================================
+       LIGHT THEME DESIGN SYSTEM
+       Light UI with bright yellow-green accents
+       ========================================== */
+
+    /* Backgrounds - Light Theme */
+    --bg-page: #FFFFFF;
+    --bg-sidebar: #F5F5F5;
+    --bg-card: #FFFFFF;
+    --bg-muted: #F9F9F9;
+    --bg-hover: #F0F0F0;
+    --bg-active: #E5E5E5;
+
+    /* Text Colors - Dark on Light */
+    --text-primary: #1A1A1A;
+    --text-secondary: #525252;
+    --text-muted: #737373;
+    --text-placeholder: #A3A3A3;
+    --text-disabled: #D4D4D4;
+
+    /* Borders - Light Theme */
+    --border-default: #E5E5E5;
+    --border-subtle: #F0F0F0;
+    --border-strong: #D4D4D4;
+
+    /* Accent (Bright Yellow-Green) - Primary Brand Color */
+    --accent-50: #F0F941;
+    --accent-100: #F0F941;
+    --accent-200: #F0F941;
+    --accent-300: #F0F941;
+    --accent-400: #F0F941;
+    --accent-500: #F0F941;
+    --accent-600: #525252;
+    --accent-700: #525252;
+    --accent-800: #525252;
+    --accent-900: #525252;
+    --accent-rgb: 240, 249, 65;
+
+    /* Status Colors - Light Theme */
+    --success-bg: rgba(5, 150, 105, 0.1);
+    --success-text: #059669;
+    --success-border: rgba(5, 150, 105, 0.2);
+    --warning-bg: rgba(217, 119, 6, 0.1);
+    --warning-text: #D97706;
+    --warning-border: rgba(217, 119, 6, 0.2);
+    --error-bg: rgba(220, 38, 38, 0.1);
+    --error-text: #DC2626;
+    --error-border: rgba(220, 38, 38, 0.2);
+    --info-bg: rgba(37, 99, 235, 0.1);
+    --info-text: #2563EB;
+    --info-border: rgba(37, 99, 235, 0.2);
+
+    /* Shadows (light theme - more visible) */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    @apply bg-[var(--bg-page)] text-[var(--text-primary)];
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+}
+
+@layer components {
+  /* ==========================================
+     TYPOGRAPHY CLASSES
+     ========================================== */
+  
+  .text-display {
+    @apply text-[24px] sm:text-[28px] lg:text-[32px] font-semibold leading-[1.15] tracking-[-0.02em];
+    color: var(--text-primary);
+  }
+
+  .text-page-title {
+    @apply text-[20px] sm:text-[22px] lg:text-[24px] font-semibold leading-[1.2] tracking-[-0.01em];
+    color: var(--text-primary);
+  }
+
+  .text-section-title {
+    @apply text-[16px] sm:text-[17px] lg:text-[18px] font-semibold leading-[1.3];
+    color: var(--text-primary);
+  }
+
+  .text-card-title {
+    @apply text-[14px] sm:text-[15px] lg:text-[16px] font-semibold leading-[1.4];
+    color: var(--text-primary);
+  }
+
+  .text-body {
+    @apply text-[14px] font-normal leading-[1.5];
+    color: var(--text-primary);
+  }
+
+  .text-body-small {
+    @apply text-[13px] font-normal leading-[1.5];
+    color: var(--text-secondary);
+  }
+
+  .text-label {
+    @apply text-[11px] sm:text-[12px] font-medium leading-[1.4];
+    color: var(--text-secondary);
+  }
+
+  .text-meta {
+    @apply text-[12px] font-normal leading-[1.4];
+    color: var(--text-muted);
+  }
+
+  .text-overline {
+    @apply text-[11px] font-semibold leading-[1.2] tracking-[0.05em] uppercase;
+    color: var(--text-muted);
+  }
+
+  /* ==========================================
+     CARD STYLES
+     ========================================== */
+  
+  .card-base {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+  
+  @media (min-width: 640px) {
+    .card-base {
+      padding: var(--space-6);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .card-base {
+      padding: var(--space-6);
+    }
+  }
+
+  .card-interactive {
+    @apply card-base cursor-pointer;
+    transition: all 150ms ease;
+  }
+
+  .card-interactive:hover {
+    border-color: var(--border-strong);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* ==========================================
+     STATUS BADGES
+     ========================================== */
+  
+  .badge-base {
+    @apply inline-flex items-center px-2.5 py-1 text-xs font-medium;
+    border-radius: var(--radius-pill);
+  }
+
+  .badge-success {
+    @apply badge-base;
+    background: var(--success-bg);
+    color: var(--success-text);
+  }
+
+  .badge-warning {
+    @apply badge-base;
+    background: var(--warning-bg);
+    color: var(--warning-text);
+  }
+
+  .badge-error {
+    @apply badge-base;
+    background: var(--error-bg);
+    color: var(--error-text);
+  }
+
+  .badge-neutral {
+    @apply badge-base;
+    background: var(--bg-muted);
+    color: var(--text-muted);
+  }
+
+  .badge-info {
+    @apply badge-base;
+    background: var(--info-bg);
+    color: var(--info-text);
+  }
+
+  /* ==========================================
+     FORM INPUT LABEL
+     ========================================== */
+  
+  .input-label {
+    @apply block text-[12px] font-medium mb-1.5;
+    color: var(--text-secondary);
+  }
+
+  .input-helper {
+    @apply text-[12px] mt-1.5;
+    color: var(--text-muted);
+  }
+
+  .input-error {
+    @apply text-[12px] mt-1.5;
+    color: var(--error-text);
+  }
+
+  /* ==========================================
+     SIDEBAR STYLES
+     ========================================== */
+  
+  .sidebar-section-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.05em] px-3;
+    color: var(--text-muted);
+    margin: var(--space-6) 0 var(--space-2) 0;
+  }
+
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 text-[14px] font-normal cursor-pointer;
+    height: var(--height-sidebar-item);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    transition: all 150ms ease;
+  }
+
+  .sidebar-item:hover {
+    background: var(--bg-hover);
+    color: var(--text-primary);
+  }
+
+  .sidebar-item.active {
+    background: rgba(240, 249, 65, 0.15);
+    color: var(--accent-500);
+    font-weight: 500;
+  }
+
+  /* ==========================================
+     EMPTY STATES
+     ========================================== */
+  
+  .empty-state {
+    @apply text-center;
+    padding: var(--space-16) var(--space-8);
+  }
+
+  .empty-state-icon {
+    @apply w-12 h-12 mx-auto mb-4;
+    color: var(--text-disabled);
+  }
+
+  .empty-state-title {
+    @apply text-[16px] font-semibold mb-2;
+    color: var(--text-secondary);
+  }
+
+  .empty-state-description {
+    @apply text-[14px] max-w-[400px] mx-auto;
+    color: var(--text-muted);
+    margin-bottom: var(--space-6);
+  }
+
+  /* ==========================================
+     TABLE STYLES
+     ========================================== */
+  
+  .table-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .table-header {
+    background: var(--bg-muted);
+  }
+
+  .table-header-cell {
+    @apply text-[12px] font-semibold text-left;
+    padding: var(--space-3) var(--space-4);
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  .table-cell {
+    @apply text-[14px];
+    padding: var(--space-4);
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: middle;
+    height: var(--height-table-row);
+  }
+
+  .table-row:hover {
+    background: var(--bg-muted);
+  }
+
+  /* ==========================================
+     FOCUS RING
+     ========================================== */
+  
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+    --tw-ring-color: var(--accent-500);
+  }
+
+  /* ==========================================
+     SCROLLBAR STYLING
+     ========================================== */
+  
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: var(--radius-pill);
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #4E4E4E;
+  }
+}
+
+/* ==========================================
+   ANIMATION UTILITIES
+   ========================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 200ms ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 200ms ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 200ms ease-out;
+}
