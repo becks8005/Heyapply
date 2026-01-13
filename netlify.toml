@@ -2,7 +2,7 @@
 # Falls du Netlify statt Vercel verwendest
 
 [build]
-  command = "npm run build"
+  command = "npx prisma generate && npm run build"
   publish = ".next"
 
 # Next.js benötigt diese Einstellungen
