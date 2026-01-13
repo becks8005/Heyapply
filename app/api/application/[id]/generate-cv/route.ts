@@ -409,7 +409,7 @@ WICHTIG:
         where: { id: params.id },
         data: {
           generatedCv: JSON.stringify(generatedCv),
-          cvInsights: cvInsightsString,
+          cvInsights: cvInsights ? JSON.stringify(cvInsights) : null,
           status: "CV_GENERATED",
           chatMessages: JSON.stringify([
             ...existingMessages,
