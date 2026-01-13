@@ -41,8 +41,19 @@ export async function POST(req: Request) {
     
   } catch (error) {
     console.error("Forgot password error:", error)
+    // Log more details for debugging
+    if (error instanceof Error) {
+      console.error("Error message:", error.message)
+      console.error("Error stack:", error.stack)
+    }
     return NextResponse.json(
-      { error: "Ein Fehler ist aufgetreten" },
+      { 
+        error: "Ein Fehler ist aufgetreten",
+        // Only include details in development
+        ...(process.env.NODE_ENV === "development" && error instanceof Error 
+          ? { details: error.message } 
+          : {})
+      },
       { status: 500 }
     )
   }
