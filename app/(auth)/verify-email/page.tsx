@@ -1,11 +1,11 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react"
 
-export default function VerifyEmailPage() {
+function VerifyEmailContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const token = searchParams.get("token")
@@ -38,40 +38,55 @@ export default function VerifyEmailPage() {
   }, [token, router])
 
   return (
+    <div className="card-base text-center">
+      {status === "loading" && (
+        <>
+          <div className="w-12 h-12 rounded-full bg-[var(--accent-50)] flex items-center justify-center mx-auto mb-4">
+            <Loader2 className="w-6 h-6 text-[var(--accent-600)] animate-spin" />
+          </div>
+          <p className="text-[var(--text-muted)]">Bestätige deine E-Mail-Adresse...</p>
+        </>
+      )}
+      {status === "success" && (
+        <>
+          <div className="w-12 h-12 rounded-full bg-[var(--success-bg)] flex items-center justify-center mx-auto mb-4">
+            <CheckCircle2 className="w-6 h-6 text-[var(--success-text)]" />
+          </div>
+          <p className="text-[var(--text-primary)] font-medium mb-2">{message}</p>
+          <p className="text-sm text-[var(--text-muted)]">Du wirst weitergeleitet...</p>
+        </>
+      )}
+      {status === "error" && (
+        <>
+          <div className="w-12 h-12 rounded-full bg-[var(--error-bg)] flex items-center justify-center mx-auto mb-4">
+            <XCircle className="w-6 h-6 text-[var(--error-text)]" />
+          </div>
+          <p className="text-[var(--text-primary)] font-medium mb-6">{message}</p>
+          <Button onClick={() => router.push("/login")} className="w-full">
+            Zur Anmeldung
+          </Button>
+        </>
+      )}
+    </div>
+  )
+}
+
+export default function VerifyEmailPage() {
+  return (
     <div className="w-full max-w-[400px] px-6">
       <div className="text-center mb-8">
         <h1 className="text-page-title mb-2">E-Mail bestätigen</h1>
       </div>
-      <div className="card-base text-center">
-        {status === "loading" && (
-          <>
-            <div className="w-12 h-12 rounded-full bg-[var(--accent-50)] flex items-center justify-center mx-auto mb-4">
-              <Loader2 className="w-6 h-6 text-[var(--accent-600)] animate-spin" />
-            </div>
-            <p className="text-[var(--text-muted)]">Bestätige deine E-Mail-Adresse...</p>
-          </>
-        )}
-        {status === "success" && (
-          <>
-            <div className="w-12 h-12 rounded-full bg-[var(--success-bg)] flex items-center justify-center mx-auto mb-4">
-              <CheckCircle2 className="w-6 h-6 text-[var(--success-text)]" />
-            </div>
-            <p className="text-[var(--text-primary)] font-medium mb-2">{message}</p>
-            <p className="text-sm text-[var(--text-muted)]">Du wirst weitergeleitet...</p>
-          </>
-        )}
-        {status === "error" && (
-          <>
-            <div className="w-12 h-12 rounded-full bg-[var(--error-bg)] flex items-center justify-center mx-auto mb-4">
-              <XCircle className="w-6 h-6 text-[var(--error-text)]" />
-            </div>
-            <p className="text-[var(--text-primary)] font-medium mb-6">{message}</p>
-            <Button onClick={() => router.push("/login")} className="w-full">
-              Zur Anmeldung
-            </Button>
-          </>
-        )}
-      </div>
+      <Suspense fallback={
+        <div className="card-base text-center">
+          <div className="w-12 h-12 rounded-full bg-[var(--accent-50)] flex items-center justify-center mx-auto mb-4">
+            <Loader2 className="w-6 h-6 text-[var(--accent-600)] animate-spin" />
+          </div>
+          <p className="text-[var(--text-muted)]">Laden...</p>
+        </div>
+      }>
+        <VerifyEmailContent />
+      </Suspense>
     </div>
   )
 }

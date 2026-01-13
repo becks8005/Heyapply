@@ -4,6 +4,13 @@ import { getLinkedInAuthUrl, exchangeCodeForToken, getLinkedInProfile } from "@/
 import { NextResponse } from "next/server"
 import { nanoid } from "nanoid"
 
+export const dynamic = "force-dynamic"
+
+// Helper to get base URL safely
+function getBaseUrl(req: Request): string {
+  return process.env.NEXTAUTH_URL || new URL(req.url).origin
+}
+
 export async function GET(req: Request) {
   try {
     const session = await auth()
@@ -17,7 +24,8 @@ export async function GET(req: Request) {
     if (action === "auth-url") {
       // Generate auth URL
       const state = nanoid()
-      const redirectUri = `${process.env.NEXTAUTH_URL}/api/profile/linkedin?action=callback`
+      const baseUrl = getBaseUrl(req)
+      const redirectUri = `${baseUrl}/api/profile/linkedin?action=callback`
       const authUrl = getLinkedInAuthUrl(redirectUri, state)
 
       // Store state in session/cookie (simplified - in production use proper session storage)
@@ -27,12 +35,13 @@ export async function GET(req: Request) {
     if (action === "callback") {
       const code = searchParams.get("code")
       const state = searchParams.get("state")
+      const baseUrl = getBaseUrl(req)
 
       if (!code) {
-        return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/profile?error=no_code`)
+        return NextResponse.redirect(new URL("/profile?error=no_code", req.url))
       }
 
-      const redirectUri = `${process.env.NEXTAUTH_URL}/api/profile/linkedin?action=callback`
+      const redirectUri = `${baseUrl}/api/profile/linkedin?action=callback`
       const { accessToken } = await exchangeCodeForToken(code, redirectUri)
       const linkedInData = await getLinkedInProfile(accessToken)
 
@@ -102,9 +111,7 @@ export async function GET(req: Request) {
           maxAge: 60 * 10, // 10 minutes
         })
 
-        return NextResponse.redirect(
-          `${process.env.NEXTAUTH_URL}/profile?linkedin=conflict`
-        )
+        return NextResponse.redirect(new URL("/profile?linkedin=conflict", req.url))
       }
 
       // No conflicts - proceed with update
@@ -128,13 +135,15 @@ export async function GET(req: Request) {
         })
       }
 
-      return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/profile?linkedin=connected`)
+      return NextResponse.redirect(new URL("/profile?linkedin=connected", req.url))
     }
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 })
   } catch (error) {
     console.error("LinkedIn error:", error)
-    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/profile?error=linkedin_failed`)
+    // Use a fallback URL since req might not be available in catch
+    const fallbackUrl = process.env.NEXTAUTH_URL || "/"
+    return NextResponse.redirect(`${fallbackUrl}/profile?error=linkedin_failed`)
   }
 }
 

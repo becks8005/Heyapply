@@ -3,6 +3,8 @@ import { generateSearchKeywords, searchJobsCh, searchLinkedIn, fetchJobDetails }
 import { matchJobToProfile } from "@/lib/job-matcher"
 import { NextResponse } from "next/server"
 
+export const dynamic = "force-dynamic"
+
 /**
  * Cron Job Endpoint für regelmäßige Job-Suche
  * Kann von Vercel Cron Jobs oder externen Services aufgerufen werden

@@ -2,6 +2,8 @@ import { auth } from "@/lib/auth"
 import { checkUsageLimit } from "@/lib/usage-tracker"
 import { NextResponse } from "next/server"
 
+export const dynamic = "force-dynamic"
+
 export async function GET(req: Request) {
   try {
     const session = await auth()
