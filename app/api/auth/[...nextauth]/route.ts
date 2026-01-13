@@ -35,8 +35,8 @@ export async function POST(req: NextRequest) {
   logAuthRequest('POST', req.url)
   console.log("[AUTH-ROUTE] POST request received:", req.url)
   try {
-    const body = await req.text()
-    console.log("[AUTH-ROUTE] Request body length:", body.length)
+    // Don't read the body - it will lock the stream and NextAuth needs it
+    // const body = await req.text() // REMOVED - causes "body should not be disturbed or locked" error
     const handler = handlers.POST
     if (!handler) {
       console.error("[AUTH-ROUTE] POST handler missing")
