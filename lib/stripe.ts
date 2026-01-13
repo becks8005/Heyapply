@@ -1,9 +1,27 @@
 import Stripe from "stripe"
 import { prisma } from "./prisma"
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2025-02-24.acacia"
-})
+let stripeClient: Stripe | null = null
+
+export function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY
+
+  // #region agent log: stripe-get-start
+  fetch('http://127.0.0.1:7242/ingest/76ffc9c7-059e-4b32-88e6-f7831653fbdd',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sessionId:'debug-session',runId:'build-stripe',hypothesisId:'S1',location:'lib/stripe.ts:getStripe',message:'Stripe getStripe called',data:{hasKey:!!key,cached:!!stripeClient,nodeEnv:process.env.NODE_ENV},timestamp:Date.now()})}).catch(()=>{})
+  // #endregion
+
+  if (!key) {
+    throw new Error("Missing STRIPE_SECRET_KEY")
+  }
+
+  if (!stripeClient) {
+    stripeClient = new Stripe(key, {
+      apiVersion: "2025-02-24.acacia",
+    })
+  }
+
+  return stripeClient
+}
 
 export const PRICES = {
   BASIS: {
@@ -25,6 +43,7 @@ export async function createCheckoutSession(
   tier: "BASIS" | "PRO",
   returnUrl: string
 ) {
+  const stripe = getStripe()
   const user = await prisma.user.findUnique({ where: { id: userId } })
   if (!user) throw new Error("User not found")
   
@@ -69,6 +88,7 @@ export async function createBillingPortalSession(
   userId: string,
   returnUrl: string
 ) {
+  const stripe = getStripe()
   const user = await prisma.user.findUnique({ where: { id: userId } })
   if (!user?.stripeCustomerId) throw new Error("No Stripe customer")
   
