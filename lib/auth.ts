@@ -1,6 +1,8 @@
 import NextAuth from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google"
+import LinkedInProvider from "next-auth/providers/linkedin"
 import bcrypt from "bcryptjs"
 import { prisma } from "./prisma"
 
@@ -27,6 +29,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     error: "/login",
   },
   providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    LinkedInProvider({
+      clientId: process.env.LINKEDIN_CLIENT_ID!,
+      clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
+    }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
@@ -45,9 +55,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           console.log("[AUTH] Looking up user:", credentials.email)
           console.log("[AUTH] Prisma client available:", !!prisma)
           
-          const user = await prisma.user.findUnique({
-            where: { email: credentials.email as string }
-          })
+          // #region agent log: prisma-query-attempt
+          let user = null
+          try {
+            user = await prisma.user.findUnique({
+              where: { email: credentials.email as string }
+            })
+          } catch (dbError) {
+            // Log detailed database error for debugging
+            const errMsg = dbError instanceof Error ? dbError.message : String(dbError)
+            const errName = dbError instanceof Error ? dbError.name : "Unknown"
+            console.error("[AUTH-DB-ERROR] Database query failed:", {
+              errorName: errName,
+              errorMessage: errMsg.substring(0, 500),
+              hasInvalidPort: errMsg.includes("invalid port"),
+              hasConnectionString: errMsg.includes("connection string")
+            })
+            throw dbError
+          }
+          // #endregion
           
           console.log("[AUTH] User lookup result:", user ? "found" : "not found")
           
